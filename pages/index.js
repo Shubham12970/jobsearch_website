@@ -1,131 +1,107 @@
-import Head from 'next/head';
-import styles from '../styles/Home.module.css';
+import Layout from '../components/layout/Layout'
+import Footer from '../components/Footer/Footer'
+import Header from '../components/Header/Header';
+import { getCookie } from 'cookies-next';
+import clientPromise from '../lib/mongodb';
 
-export default function Home() {
-  return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+export async function getServerSideProps(context) {
+    const req = context.req
+    const res = context.res
+    var username = getCookie('username', { req, res });
+    if (username == undefined){
+        return {
+            redirect: {
+                permanent: false,
+                destination: "/home"
+            }
+        }
+    }
+    const client = await clientPromise;
+    const db = client.db("Users");
+    const users = await db.collection("Profiles").find({"Username": username}).toArray();
+    const userdoc=users[0]
+    const email=userdoc['Email']
 
-      <main>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+    const url = 'https://jsearch.p.rapidapi.com/search?query=Electrical%20Engineer%20in%20Delhi%2C%20India%20&page=2&num_pages=1&radius=200';
+const options = {
+	method: 'GET',
+	headers: {
+		'X-RapidAPI-Key': '4d0af16280mshec4c0cfdbb2816ap1acc11jsn117cbef80439',
+		'X-RapidAPI-Host': 'jsearch.p.rapidapi.com'
+	}
+};
 
-        <p className={styles.description}>
-          Get started by editing <code>pages/index.js</code>
-        </p>
+	const response = await fetch(url, options);
+	const resp = await response.json();
+    const result= resp.data;
+	console.log(result)
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+    
+    return {props:{result,username:username, email: email}}
+};
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+export default function HomePage({result,username,email} ) {
+   
+    return (
+        <Layout pageTitle="Home">
+            {username &&
+            <>
+        <Header 
+        name= {username}
+        email={email}
+        />
+         <main className="">
+    
+      <div className="px-4">
+        <div className="my-5">
+          <h2 className=" text-lg font-semibold text-gray-900">NEW JOBS</h2>
         </div>
-      </main>
-
-      <footer>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel" className={styles.logo} />
-        </a>
-      </footer>
-
-      <style jsx>{`
-        main {
-          padding: 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-        footer {
-          width: 100%;
-          height: 100px;
-          border-top: 1px solid #eaeaea;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-        footer img {
-          margin-left: 0.5rem;
-        }
-        footer a {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          text-decoration: none;
-          color: inherit;
-        }
-        code {
-          background: #fafafa;
-          border-radius: 5px;
-          padding: 0.75rem;
-          font-size: 1.1rem;
-          font-family:
-            Menlo,
-            Monaco,
-            Lucida Console,
-            Liberation Mono,
-            DejaVu Sans Mono,
-            Bitstream Vera Sans Mono,
-            Courier New,
-            monospace;
-        }
-      `}</style>
-
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family:
-            -apple-system,
-            BlinkMacSystemFont,
-            Segoe UI,
-            Roboto,
-            Oxygen,
-            Ubuntu,
-            Cantarell,
-            Fira Sans,
-            Droid Sans,
-            Helvetica Neue,
-            sans-serif;
-        }
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
-    </div>
-  );
+        <div className="grid sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-3">
+          {result.map((result)=>{
+            let logo=true;
+            if(result.employer_logo == null){
+                logo=false;
+            }
+            return (
+               <div className="mb-6 rounded-lg bg-white p-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">    
+                <img className="mr-2 h-10 w-10 rounded-full object-cover" src={logo?result.employer_logo:"/assets/jobimg.svg"} alt="profile" />
+                <div>
+                  <h3 className="text-base font-semibold text-gray-900">{result.employer_name}</h3>
+                  <span className="block text-xs font-normal text-gray-500">{result.job_title}</span>
+                  <span className="block text-xs font-normal text-gray-500">{result.employer_company_type}</span>
+                  <span className="block text-xs font-normal text-gray-500">{result.job_employment_type}</span>
+                </div>
+              </div>
+              <a href={result.job_apply_link} className="text-sm font-medium text-indigo-500"><span className="mr-0.5">+</span>Apply</a>
+            </div>
+            <p className="my-6 text-sm font-normal text-gray-500">{result.job_description.slice(0,400)}<span className="mx-2 font-large text-gray-700">...</span></p>
+            <h3 className="text-base font-semibold text-gray-900"><a href={result.employer_website}>{result.employer_website}</a></h3>
+            <div className="mt-6 flex items-center justify-between text-sm font-semibold text-gray-900">
+              <div className="flex">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="mr-2 h-5 w-5 text-base text-gray-500">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 6.878V6a2.25 2.25 0 012.25-2.25h7.5A2.25 2.25 0 0118 6v.878m-12 0c.235-.083.487-.128.75-.128h10.5c.263 0 .515.045.75.128m-12 0A2.25 2.25 0 004.5 9v.878m13.5-3A2.25 2.25 0 0119.5 9v.878m0 0a2.246 2.246 0 00-.75-.128H5.25c-.263 0-.515.045-.75.128m15 0A2.25 2.25 0 0121 12v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6c0-.98.626-1.813 1.5-2.122" />
+                </svg>
+                <span className="mr-1">{result.job_city}</span> , {result.job_country}
+              </div>
+              <div className="flex items-center">
+              <img src="https://www.svgrepo.com/show/355037/google.svg" class="w-4 h-4" alt="" />
+                <a className="mx-1" href={result.job_google_link}>Google Link</a>
+              </div>
+            </div>
+          </div> 
+            )
+          })}
+          
+        </div>
+      </div>
+    </main>
+        
+        <Footer />
+        </>}
+        </Layout>
+    );
 }
+
+

@@ -6,11 +6,21 @@
     "start": "next start"
   },
   "dependencies": {
+    "cookies": "^0.8.0",
+    "cookies-next": "^4.0.0",
+    "mongodb": "^6.2.0",
     "next": "latest",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-cookie": "^6.1.1",
+    "react-dom": "18.2.0",
+    "react-hook-form": "^7.47.0"
   },
   "engines": {
     "node": ">=18"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.31",
+    "tailwindcss": "^3.3.3"
   }
 }
