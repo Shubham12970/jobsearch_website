@@ -1,5 +1,5 @@
 import SignupForm from './signupform';
-export default function SignupPage(){
+export default function SignupPage(props){
     return(
         <div className="min-h-screen bg-gray-200 text-gray-900 flex justify-center">
             <div className="max-w-screen-xl m-0 sm:m-10 bg-gray-100 shadow sm:rounded-lg flex justify-center flex-1">
@@ -9,7 +9,7 @@ export default function SignupPage(){
                     </div>
                 </div>
                 <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
-                   <div className='ml-8 mt-6'><SignupForm /></div>
+                   <div className='ml-8 mt-6'><SignupForm msg={props.msg} /></div>
                 </div>
             </div>
         </div>

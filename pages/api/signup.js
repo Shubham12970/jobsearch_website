@@ -10,14 +10,14 @@ const email=req.body['email']
 const usertype= req.body['usertype']
 const passwordagain = req.body['passwordagain']
 if (password != passwordagain){
-    res.redirect("/error?msg=The two passwords do not match.");
+    res.redirect("/signup?msg=The two passwords do not match.");
     return;
 }
 const client = await clientPromise;
 const db = client.db("Users");
 const users = await db.collection("Profiles").find({"Username": username}).toArray();
 if (users.length > 0){
-    res.redirect("/error?msg=Username already exists");
+    res.redirect("/signup?msg=Username already exists");
     return;
 }
 const password_hash = createHash('sha256').update(password).digest('hex');

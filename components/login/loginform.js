@@ -1,5 +1,5 @@
 
-export default function LoginForm(){
+export default function LoginForm(props){
     return (
 <div className="wrapper">
 
@@ -16,6 +16,9 @@ export default function LoginForm(){
                 <div className="field">
                   <input  id="password" name="password" type="password" placeholder="Password" required />
                 </div>
+                <div className="relative">
+                                    <p className="text-sm text-red-400">{props.msg}</p>
+                                </div>
                 <div className="field btn">
                     <div className="btn-layer"></div>
                     <input type="submit" value="Login" />

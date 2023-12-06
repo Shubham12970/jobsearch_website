@@ -1,5 +1,5 @@
 
-export default function SignupForm(){
+export default function SignupForm(props){
     return (
 <div className="wrapper">
 
@@ -31,6 +31,9 @@ export default function SignupForm(){
               <div className="field">
                 <input id="passwordagain" name="passwordagain" type="password" placeholder="Confirm password" required />
               </div>
+              <div className="relative">
+                                    <p className="text-sm text-red-400">{props.msg}</p>
+                                </div>
               <div className="field btn">
                 <div className="btn-layer"></div>
                 <input type="submit" value="Signup" />

@@ -1,10 +1,10 @@
 import LoginForm from './loginform';
-export default function LoginPage(){
+export default function LoginPage(props){
     return(
         <div className="min-h-screen bg-gray-200 text-gray-900 flex justify-center">
             <div className="max-w-screen-xl m-0 sm:m-10 bg-gray-100 shadow sm:rounded-lg flex justify-center flex-1">
                 <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12 ">
-                   <div className='mt-12 ml-6'><LoginForm /></div>
+                   <div className='mt-12 ml-6'><LoginForm msg={props.msg} /></div>
                 </div>
                 <div className="flex-1 bg-indigo-100 text-center hidden lg:flex">
                     <div className="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat"

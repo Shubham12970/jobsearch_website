@@ -27,7 +27,7 @@ export default function Home() {
       <Head>
         <title>Employment Website</title>
       </Head>
-      <LoginForm />
+      <LoginForm msg={msg} />
       </Layout>
   );
 }

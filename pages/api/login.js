@@ -11,7 +11,7 @@ export default async function handler(req, res) {
     const users = await db.collection("Profiles").find({"Username": username}).toArray();
     const useremail = await db.collection("Profiles").find({"Email": username}).toArray();
     if (users.length == 0 && useremail.length==0){
-        res.redirect("/error?msg=Incorrect username or password");
+        res.redirect("/login?msg=Incorrect username or password");
         return;
     }
     const user = users[0]
@@ -21,7 +21,7 @@ export default async function handler(req, res) {
         cookies.set('username', username)
         res.redirect("/",{user: users})
     } else {
-        res.redirect("/error?msg=Incorrect username or password")
+        res.redirect("/login?msg=Incorrect username or password")
     }
   } else {
     res.redirect("/")
