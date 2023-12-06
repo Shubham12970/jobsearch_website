@@ -7,7 +7,7 @@ export default async function handler(req, res){
         const client = await clientPromise;
           const db = client.db("Users");
           await db.collection("Profiles").deleteOne({"Username":username})
-          res.redirect("/home")
+          res.redirect("/success")
     }else{
         res.redirect("/")
     }

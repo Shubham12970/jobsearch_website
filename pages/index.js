@@ -34,9 +34,6 @@ const options = {
 	const response = await fetch(url, options);
 	const resp = await response.json();
     const result= resp.data;
-	console.log(result)
-
-    
     return {props:{result,username:username, email: email}}
 };
 
@@ -86,7 +83,7 @@ export default function HomePage({result,username,email} ) {
                 <span className="mr-1">{result.job_city}</span> , {result.job_country}
               </div>
               <div className="flex items-center">
-              <img src="https://www.svgrepo.com/show/355037/google.svg" class="w-4 h-4" alt="" />
+              <img src="https://www.svgrepo.com/show/355037/google.svg" className="w-4 h-4" alt="" />
                 <a className="mx-1" href={result.job_google_link}>Google Link</a>
               </div>
             </div>

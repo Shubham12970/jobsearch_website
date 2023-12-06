@@ -27,7 +27,6 @@ export async function getServerSideProps(context) {
 };
 
 export default function Profile({username,email,details}){
-    console.log(details)
     return(
         <Layout pageTitle="profile">
          <header className="w-full mt-5 text-gray-700 bg-blue-200 border-t border-gray-100 shadow-sm body-font">
@@ -56,7 +55,7 @@ export default function Profile({username,email,details}){
   Edit
 </button></a>
 <form action="/api/delete" method="POST">
-    <input className="hidden" name="username" value={username} />
+    <input className="hidden" name="username" value={username} readOnly/>
     <button type="submit"
   className="text-white py-2 px-4 uppercase rounded bg-gray-700 hover:bg-gray-800 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5"
 >
